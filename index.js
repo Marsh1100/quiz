@@ -2,20 +2,13 @@
 class Question {
     constructor(question, answerA,answerB,answerC,answerD, answerCorrect){
         this.question = question;
-        this.answers = [answerA,answerB,answerC,answerD]
+        this.answers = [answerA,answerB,answerC,answerD];
         this.answerCorrect = answerCorrect;
     }
 
 }
-/*function shuffle(unshuffled){
-  console.log("si buenas")
-  let shuffled = unshuffled
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
 
-  return shuffled;
-}*/
+console.log(momentoComida);
 
 class QuestionManager {
     constructor() {
@@ -78,6 +71,15 @@ $questionForm.addEventListener("submit", (e)=>{
 
 })
 
+function shuffle(unshuffled){
+  console.log("si buenas")
+  let shuffled = unshuffled
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+
+  return shuffled;
+}
 
 function renderQuestions(){
   $questionsList.innerHTML=" ";
