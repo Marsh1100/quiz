@@ -36,8 +36,13 @@
             <input id="answer_d" class="form-control form-control-sm" type="text" placeholder=" " aria-label=".form-control-sm example">
         </div>
         <label for="answer_correct">Respuesta correcta:</label>
-        <input id="answer_correct" class="form-control form-control-sm" type="text" placeholder=" " aria-label=".form-control-sm example">
-
+        <select id="answer_correct" class="form-select" required>
+            <option selected>Seleccionar respuesta</option>
+            <option value="0">A</option>
+            <option value="1">B</option>
+            <option value="2">C</option>
+            <option value="3">D</option>
+        </select>
         <button type="submit" class="btn btn-primary">Agregar pregunta</button>
 
     </form>

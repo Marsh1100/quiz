@@ -2,13 +2,20 @@
 class Question {
     constructor(question, answerA,answerB,answerC,answerD, answerCorrect){
         this.question = question;
-        this.answerA = answerA;
-        this.answerB = answerB;
-        this.answerC = answerC;
-        this.answerD = answerD;
+        this.answers = [answerA,answerB,answerC,answerD]
         this.answerCorrect = answerCorrect;
     }
+
 }
+/*function shuffle(unshuffled){
+  console.log("si buenas")
+  let shuffled = unshuffled
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+
+  return shuffled;
+}*/
 
 class QuestionManager {
     constructor() {
@@ -49,28 +56,25 @@ $questionForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     console.log("sadfsdg")
     //Validación de la respuesta
-    const arrayAnswer = ["A","B","C","D"];
-    const question = $question.value;
+    if($answerCorrect.value != 'Seleccionar respuesta'){
+      const question = $question.value;
 
-    const answerA = $answerA.value;
-    const answerB = $answerB.value;
-    const answerC = $answerC.value;
-    const answerD = $answerD.value;
+      const answerA = $answerA.value;
+      const answerB = $answerB.value;
+      const answerC = $answerC.value;
+      const answerD = $answerD.value;
 
-    const answerCorrect = $answerCorrect.value;
+      const answerCorrect = $answerCorrect.value;
+      console.log(answerCorrect);
+      const newQuestion = new Question(question,answerA,answerB,answerC,answerD,answerCorrect);
+      questionManager.addQuestion(newQuestion);
+      renderQuestions();
+      $questionForm.reset();
 
-    if(!arrayAnswer.includes(answerCorrect.toUpperCase())){
-        alert("La respuesta ingresada no es válida")
-        return
-    }
+      console.log(questionManager)
+      console.log(newQuestion)
+    };
     
-    const newQuestion = new Question(question,answerA,answerB,answerC,answerD,answerCorrect);
-    questionManager.addQuestion(newQuestion);
-    renderQuestions();
-    $questionForm.reset();
-
-    console.log(questionManager)
-    console.log(newQuestion)
 
 })
 
@@ -82,22 +86,37 @@ function renderQuestions(){
   for(let i = 0; i < questions.length; i++){
     const item = questions[i];
 
+    //Array desordenado
+    let answers2 = shuffle(item.answers);
+    console.log(answers2);
     let html = `<span>${item.question}</span>
                 <div class="form-check">
-                <input value=${"A"+i}class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${item.answerA}</label>
+                <input value="A" class="form-check-input" type="radio" name="select"  >
+                <label class="form-check-label">${answers2[0]}</label>
+                </div>
 
-                <input value=${"D"+i}  class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${item.answerB}</label>
+                <div class="form-check">
+                <input value="B"  class="form-check-input" type="radio" name="select"  >
+                <label class="form-check-label">${answers2[1]}</label>
+                </div>
 
-                <input value=${"D"+i}class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${item.answerC}</label>
+                <div class="form-check">
+                <input value="C" class="form-check-input" type="radio" name="select"  >
+                <label class="form-check-label">${answers2[2]}</label>
+                </div>
 
-                <input value=${"D"+i}class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${item.answerD}</label>
-                
-                 </div>`;
+                <div class="form-check">
+                <input value="D" class="form-check-input" type="radio" name="select"  >
+                <label class="form-check-label">${answers2[3]}</label>
+                </div>
+                <button  class="btn btn-danger" onclick="removeQuestion(${i})">Eliminar</button>
+                `;
 
     $questionsList.insertAdjacentHTML('beforeend',html)
   }
+};
+
+function removeQuestion(index) {
+  questionManager.removeQuestion(index);
+  renderQuestions();
 }
