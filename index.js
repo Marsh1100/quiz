@@ -8,7 +8,6 @@ class Question {
 
 }
 
-console.log(momentoComida);
 
 class QuestionManager {
     constructor() {
@@ -66,6 +65,8 @@ $questionForm.addEventListener("submit", (e)=>{
 
       console.log(questionManager)
       console.log(newQuestion)
+    }else{
+      alert("lksdflkasd_NO")
     };
     
 
@@ -91,7 +92,7 @@ function renderQuestions(){
     //Array desordenado
     let answers2 = shuffle(item.answers);
     console.log(answers2);
-    let html = `<span>${item.question}</span>
+    let html = `<br><span>${(i+1)+item.question}</span>
                 <div class="form-check">
                 <input value="A" class="form-check-input" type="radio" name="select"  >
                 <label class="form-check-label">${answers2[0]}</label>

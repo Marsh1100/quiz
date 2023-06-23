@@ -3,3 +3,19 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+
+
+h1,h2,h3{
+    text-align: center;
+    background-color: rgb(231, 184, 243);
+}
+
+form{
+    width: 500px;
+    margin: auto;
+}
+section{
+    width: 500px;
+    margin: auto;
+}
