@@ -17,7 +17,10 @@ class QuestionManager {
       addQuestion(question) {
         this.question.push(question);
       }
-    
+      
+      editQuestion(index,question){
+        this.question.splice(index,1,question);
+      }
       removeQuestion(index) {
         this.question.splice(index, 1);
       }
@@ -43,10 +46,11 @@ const $answerCorrect = document.getElementById("answer_correct");
 
 const $questionsList = document.getElementById("quiz");
 
+const $btnQuestion = document.getElementById("btn-question");
 //Formulario
-$questionForm.addEventListener("submit", (e)=>{
+$btnQuestion.addEventListener("click", (e)=>{
     e.preventDefault();
-    console.log("sadfsdg")
+
     //Validación de la respuesta
     if($answerCorrect.value != 'Seleccionar respuesta'){
       const question = $question.value;
@@ -59,21 +63,35 @@ $questionForm.addEventListener("submit", (e)=>{
       const answerCorrect = $answerCorrect.value;
       console.log(answerCorrect);
       const newQuestion = new Question(question,answerA,answerB,answerC,answerD,answerCorrect);
-      questionManager.addQuestion(newQuestion);
+      
+      if(e.target.textContent == 'Agregar pregunta'){
+        questionManager.addQuestion(newQuestion);
+      }else{
+        let index = e.target.value;
+        questionManager.editQuestion(index,newQuestion)
+        $btnQuestion.innerHTML = "Agregar pregunta"
+
+      }
+      
       renderQuestions();
-      $questionForm.reset();
+      $question.value = "";
+      $answerA.value = " ";
+      $answerB.value = " ";
+      $answerC.value = " ";
+      $answerD.value = " ";
+      $answerCorrect.value = "Seleccionar respuesta";
 
       console.log(questionManager)
       console.log(newQuestion)
     }else{
-      alert("lksdflkasd_NO")
+      alert("No ha seleccionado ninguna opción de respuesta.")
     };
     
 
 })
 
 function shuffle(unshuffled){
-  console.log("si buenas")
+
   let shuffled = unshuffled
     .map(value => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -92,7 +110,7 @@ function renderQuestions(){
     //Array desordenado
     let answers2 = shuffle(item.answers);
     console.log(answers2);
-    let html = `<br><span>${(i+1)+item.question}</span>
+    let html = `<br><span>${(i+1)+"."+item.question}</span>
                 <div class="form-check">
                 <input value="A" class="form-check-input" type="radio" name="select"  >
                 <label class="form-check-label">${answers2[0]}</label>
@@ -112,7 +130,10 @@ function renderQuestions(){
                 <input value="D" class="form-check-input" type="radio" name="select"  >
                 <label class="form-check-label">${answers2[3]}</label>
                 </div>
+                <div class="botones">
+                <button  class="btn btn-warning" onclick="editQuestion(${i})">Editar</button>
                 <button  class="btn btn-danger" onclick="removeQuestion(${i})">Eliminar</button>
+                </div>
                 `;
 
     $questionsList.insertAdjacentHTML('beforeend',html)
@@ -122,4 +143,23 @@ function renderQuestions(){
 function removeQuestion(index) {
   questionManager.removeQuestion(index);
   renderQuestions();
+}
+
+function editQuestion(index){
+  const questions = questionManager.getQuestions();
+  
+  let editObject = questions[index];
+  console.log(editObject)
+  let {question,answers,answerCorrect} = editObject;
+
+  $question.value = question;
+  $answerA.value = answers[0];
+  $answerB.value = answers[1];
+  $answerC.value = answers[2];
+  $answerD.value = answers[3];
+  $answerCorrect.value = answerCorrect;
+
+  $btnQuestion.innerHTML = "Confirmar edición"
+  $btnQuestion.setAttribute("value", index)
+
 }

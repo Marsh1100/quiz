@@ -14,8 +14,17 @@ h1,h2,h3{
 form{
     width: 500px;
     margin: auto;
+    
+}
+.botones{
+    display: flex;
 }
 section{
     width: 500px;
     margin: auto;
+}
+
+.hidden{
+    display: none;
+    
 }
