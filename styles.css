@@ -4,25 +4,76 @@
     box-sizing: border-box;
 }
 
+nav{
+    background-color: blueviolet;
+}
 
-
-h1,h2,h3{
+h1,h2{
     text-align: center;
     background-color: rgb(231, 184, 243);
 }
+h3{
+    text-align: center;
+    background-color: rgb(231, 184, 243);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 
-form{
-    width: 500px;
+}
+
+.form{
+    width: 60%;
     margin: auto;
-    
+    row-gap:15px;
 }
 .botones{
     display: flex;
 }
-section{
-    width: 500px;
+#quiz{
+    width: 60%;
+    margin: auto;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: space-between;
+    column-gap: 50px;
+
+}
+
+.answersQuiz{
+    display: flex;
+    flex-direction: column;
+}
+
+.botones{
+    display: flex;
+    column-gap: 20px;
+}
+
+.center{
+    display: flex;
+    justify-content:center;
+    padding: 10px;
+
+}
+.resolveQuiz{
+    background-color: bisque;
+    width: 60%;
+    margin: auto;
+    border-radius: 15px;
+
+}
+.test{
+    width: 60%;
     margin: auto;
 }
+
+footer {
+    
+    background:#21021b;
+    color: white;
+    text-align: center;
+ }
 
 .hidden{
     display: none;
