@@ -46,6 +46,28 @@ function addlocalStorage(){
 //Interacción con el DOM
 const $questionForm = document.getElementById("question-form");
 
+questionManager.addQuestion(new Question("¿Cuántos litros de sangre tiene una persona adulta?",
+                                        "Tiene entre 2 y 4 litros",
+                                        "Tiene entre 4 y 6 litros",
+                                        "Tiene 10 litros",
+                                        "Tiene 7 litros",
+                                        "1"));
+questionManager.addQuestion(new Question("¿Cuál es el libro más vendido en el mundo después de la Biblia?",
+                                        "El Señor de los Anillos",
+                                        "Don Quijote de la Mancha",
+                                        "Cien años de Soledad",
+                                        "Harry Potter",
+                                        "1"));
+questionManager.addQuestion(new Question("¿Cuáles son los representantes más destacados de la literatura renacentista?",
+                                        "Miguel de Cervantes, William Shakespeare, Luis de Camões.",
+                                        "Leonardo da Vinci, Miguel Angel Buonarroti, Sandro Boticelli",
+                                        "Caravaggio, Bernini, Borromini", "Jorge Isaac, José Martí, Eduardo Blanco",
+                                        "0"));
+
+//Elementos del DOM
+const $main = document.getElementById("make-quiz");
+const $quiz = document.getElementById("resolve-quiz");
+
 const $question = document.getElementById("question");
 const $answerA = document.getElementById("answer_a");
 const $answerB = document.getElementById("answer_b");
@@ -58,7 +80,12 @@ const $questionsList = document.getElementById("quiz");
 const $questionTest = document.getElementById("test");
 
 const $btnQuestion = document.getElementById("btn-question");
-const $btnView = document.getElementById("btn-view");
+const $linkViewMain = document.getElementById("link-main");
+const $linkViewQuiz = document.getElementById("link-resolveQuiz");
+
+const $btnSend = document.getElementById("btn-send");
+const $btnRepeat = document.getElementById("btn-repeat");
+
 
 //Formulario
 $btnQuestion.addEventListener("click", (e)=>{
@@ -91,7 +118,7 @@ $btnQuestion.addEventListener("click", (e)=>{
       $answerB.value = " ";
       $answerC.value = " ";
       $answerD.value = " ";
-      $answerCorrect.value = "Seleccionar respuesta";
+      $answerCorrect.n = "Seleccionar respuesta";
 
     }else{
       alert("No ha seleccionado ninguna opción de respuesta.")
@@ -100,15 +127,84 @@ $btnQuestion.addEventListener("click", (e)=>{
 
 });
 //AddEventListener
-
-$btnView.addEventListener('click',(e)=>{
+$linkViewMain.addEventListener('click',(e)=>{
   e.preventDefault();
+  $quiz.style.display = 'none';
+  $main.style.display = 'flex';
 
+});
+$linkViewQuiz.addEventListener('click',(e)=>{
+  e.preventDefault();
   //Ocultar cuestionario y preguntas
+  $main.style.display = 'none';
+  $quiz.style.display = 'block';
+
+  $btnSend.style.display = 'block';
+  $btnRepeat.style.display = 'none';
+
+    
+  renderQuiz();
+});
+
+$btnSend.addEventListener('click',(e)=>{
+  e.preventDefault();
+  $btnSend.style.display = 'none';
+  $btnRepeat.style.display = 'block';
+
+  const questions = questionManager.getQuestions();
+
+  questions.forEach((element,index)=>{
+    let {answers,answerCorrect} = element;
+    console.log(answers[Number(answerCorrect)]);
+
+    let $answersSelect = document.getElementsByName(`${"select"+index}`);
+    let $parent = document.getElementById(`${index}`);
+
+    for (var i = 0; i < $answersSelect.length; i++){ 
+      if ($answersSelect[i].checked) {
+         break; 
+     }
+    }
+
+    if(answers.length != i){
+          if($answersSelect[i].value == answers[Number(answerCorrect)]){
+            console.log("Prueba bien")
+            checkAnswers($parent,true);
+          }else{
+            console.log("respuesta incorrecta")
+            checkAnswers($parent,false);
+
+          };
+    }
+    
+  });
+
+});
+
+$btnRepeat.addEventListener('click',(e)=>{
+  e.preventDefault();
+  $btnSend.style.display = 'block';
+  $btnRepeat.style.display = 'none';
+
 
   renderQuiz();
-})
 
+});
+function checkAnswers(parentNode,state){
+  if(state){
+    let html =`<div class="alert alert-success d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill"></i>
+                <div> ¡Respuesta correcta! </div>
+              </div>`;
+    parentNode.insertAdjacentHTML('afterbegin',html)
+  }else{
+    let html =`<div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div> Respuesta incorrecta </div>
+              </div>`;
+    parentNode.insertAdjacentHTML('afterbegin',html)
+  }
+}
 
 function shuffle(unshuffled){
 
@@ -125,29 +221,28 @@ function shuffle(unshuffled){
 function renderQuestions(){
   $questionsList.innerHTML=" ";
   const questions = questionManager.getQuestions();
-  console.log(questions)
   for(let i = 0; i < questions.length; i++){
     const item = questions[i];
 
     let html = `<div class="answersQuiz">
                 <br><span>${(i+1)+"."+item.question}</span>
                 <div class="form-check">
-                <input value="A" class="form-check-input" type="radio" name="select"  disabled>
+                <input value="A" class="form-check-input" type="radio"  disabled>
                 <label class="form-check-label">${item.answers[0]}</label>
                 </div>
 
                 <div class="form-check">
-                <input value="B"  class="form-check-input" type="radio" name="select" disabled  >
+                <input value="B"  class="form-check-input" type="radio" disabled  >
                 <label class="form-check-label">${item.answers[1]}</label>
                 </div>
 
                 <div class="form-check">
-                <input value="C" class="form-check-input" type="radio" name="select" disabled >
+                <input value="C" class="form-check-input" type="radio" disabled >
                 <label class="form-check-label">${item.answers[2]}</label>
                 </div>
 
                 <div class="form-check">
-                <input value="D" class="form-check-input" type="radio" name="select" disabled >
+                <input value="D" class="form-check-input" type="radio"  disabled >
                 <label class="form-check-label">${item.answers[3]}</label>
                 </div>
                 <div class="botones">
@@ -168,34 +263,41 @@ function renderQuiz(){
 
     //Array desordenado
     let answers2 = shuffle(item.answers);
-    console.log(answers2);
-    let html = `<div class="answersQuiz">
-                <br><span>${(i+1)+". "+item.question}</span>
-                <div class="form-check">
-                <input value="${answers2[0]}" class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${answers2[0]}</label>
-                </div>
+    let html = `<div class="answersQuiz" id="${i}">
+                  <span>${(i+1)+". "+item.question}</span>
 
-                <div class="form-check">
-                <input value="${answers2[1]}"  class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${answers2[1]}</label>
-                </div>
+                  <div class="form-check">
+                  <input value="${answers2[0]}" class="form-check-input" type="radio" name="${"select"+i}"   required="required">
+                  <label class="form-check-label">${answers2[0]}</label>
+                  </div>
 
-                <div class="form-check">
-                <input value="${answers2[2]}" class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${answers2[2]}</label>
-                </div>
+                  <div class="form-check">
+                  <input value="${answers2[1]}"  class="form-check-input" type="radio" name="${"select"+i}"  >
+                  <label class="form-check-label">${answers2[1]}</label>
+                  </div>
 
-                <div class="form-check">
-                <input value="${answers2[3]}" class="form-check-input" type="radio" name="select"  >
-                <label class="form-check-label">${answers2[3]}</label>
-                </div>
-                
+                  <div class="form-check">
+                  <input value="${answers2[2]}" class="form-check-input" type="radio" name="${"select"+i}"  >
+                  <label class="form-check-label">${answers2[2]}</label>
+                  </div>
+
+                  <div class="form-check">
+                  <input value="${answers2[3]}" class="form-check-input" type="radio" name="${"select"+i}"  >
+                  <label class="form-check-label">${answers2[3]}</label>
+                  </div>
+                  <br>
                 </div>
                 `;
 
     $questionTest.insertAdjacentHTML('beforeend',html)
   }
+
+  /*let html = `<div class="center">
+              <button id="btn-send" type="btn" class="btn btn-primary">Enviar</button> 
+              </div>`
+  
+  $questionTest.insertAdjacentHTML('beforeend',html)*/
+
   //addlocalStorage();
 
   };
