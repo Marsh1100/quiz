@@ -4,6 +4,13 @@
     box-sizing: border-box;
 }
 
+.fondo{
+    height: 92vh;
+    background-image: url(img/signo-de-interrogacion.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
 nav{
     background-color: blueviolet;
     height: 7vh;

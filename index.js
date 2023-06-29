@@ -32,20 +32,6 @@ class QuestionManager {
 
 // Crear instancia de Preguntas
 const questionManager =  new QuestionManager();
-
-//AddEventListener
-/*document.addEventListener('DOMContentLoaded',function(){
-  questionManager = JSON.parse(localStorage.getItem('questionManager')) || questionManager;
-  renderQuestions();
-});
-
-function addlocalStorage(){
-  localStorage.setItem('questionManager', JSON.stringify(questionManager));
-};*/
-
-//Interacción con el DOM
-const $questionForm = document.getElementById("question-form");
-
 questionManager.addQuestion(new Question("¿Cuántos litros de sangre tiene una persona adulta?",
                                         "Tiene entre 2 y 4 litros",
                                         "Tiene entre 4 y 6 litros",
@@ -64,10 +50,33 @@ questionManager.addQuestion(new Question("¿Cuáles son los representantes más 
                                         "Caravaggio, Bernini, Borromini", "Jorge Isaac, José Martí, Eduardo Blanco",
                                         "0"));
 
+localStorage.setItem('questions', JSON.stringify(questionManager.question));
+
+//AddEventListener
+document.addEventListener('DOMContentLoaded',function(){
+  let questions = JSON.parse(localStorage.getItem('questions')) || questionManager;
+  if (questions.length != 0){
+    questionManager.question=[];
+    questions.forEach(e=>{
+      questionManager.addQuestion(e);
+    })
+  }
+  renderQuestions();
+});
+
+function addlocalStorage(questions){
+  localStorage.setItem('questions', JSON.stringify(questions));
+};
+
+//Interacción con el DOM
+const $questionForm = document.getElementById("question-form");
+
+
+
 //Elementos del DOM
 const $main = document.getElementById("make-quiz");
 const $quiz = document.getElementById("resolve-quiz");
-
+const $fondo = document.getElementById("fondo");
 const $question = document.getElementById("question");
 const $answerA = document.getElementById("answer_a");
 const $answerB = document.getElementById("answer_b");
@@ -113,12 +122,13 @@ $btnQuestion.addEventListener("click", (e)=>{
       }
       
       renderQuestions();
+      $answerCorrect.value = "Seleccionar respuesta";
       $question.value = "";
       $answerA.value = " ";
       $answerB.value = " ";
       $answerC.value = " ";
       $answerD.value = " ";
-      $answerCorrect.n = "Seleccionar respuesta";
+      
 
     }else{
       alert("No ha seleccionado ninguna opción de respuesta.")
@@ -129,6 +139,7 @@ $btnQuestion.addEventListener("click", (e)=>{
 //AddEventListener
 $linkViewMain.addEventListener('click',(e)=>{
   e.preventDefault();
+  $fondo.style.display = "none";
   $quiz.style.display = 'none';
   $main.style.display = 'flex';
 
@@ -136,6 +147,7 @@ $linkViewMain.addEventListener('click',(e)=>{
 $linkViewQuiz.addEventListener('click',(e)=>{
   e.preventDefault();
   //Ocultar cuestionario y preguntas
+  $fondo.style.display = "none";
   $main.style.display = 'none';
   $quiz.style.display = 'block';
 
@@ -267,6 +279,7 @@ function renderQuestions(){
                 `;
     $questionsList.insertAdjacentHTML('beforeend',html)
   }
+  addlocalStorage(questions);
 };
 
 function renderQuiz(){
@@ -326,7 +339,6 @@ function editQuestion(index){
   const questions = questionManager.getQuestions();
   
   let editObject = questions[index];
-  console.log(editObject)
   let {question,answers,answerCorrect} = editObject;
 
   $question.value = question;
