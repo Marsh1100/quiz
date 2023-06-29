@@ -121,6 +121,9 @@ img{
     padding: 10px;
 }
 
+.note{
+    width:fit-content;
+}
 footer {
     color: white;
     background-color: #4f0450;

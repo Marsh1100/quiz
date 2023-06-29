@@ -152,7 +152,7 @@ $btnSend.addEventListener('click',(e)=>{
   $btnRepeat.style.display = 'block';
 
   const questions = questionManager.getQuestions();
-
+  let contador = 0;
   questions.forEach((element,index)=>{
     let {answers,answerCorrect} = element;
     console.log(answers[Number(answerCorrect)]);
@@ -165,19 +165,25 @@ $btnSend.addEventListener('click',(e)=>{
          break; 
      }
     }
-
     if(answers.length != i){
           if($answersSelect[i].value == answers[Number(answerCorrect)]){
-            console.log("Prueba bien")
             checkAnswers($parent,true);
+            contador +=1;
           }else{
-            console.log("respuesta incorrecta")
             checkAnswers($parent,false);
-
           };
-    }
-    
+    }else{
+      let html =`<div class="alert alert-warning d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div> Pregunta sin responder </div>
+              </div>`;
+      $parent.insertAdjacentHTML('afterbegin',html)
+    } 
+    //Deshabilitar los botones después de responder 
+    $answersSelect.forEach(e=>{e.disabled=true})
+  
   });
+  note(questions.length,contador);
 
 });
 
@@ -190,6 +196,14 @@ $btnRepeat.addEventListener('click',(e)=>{
   renderQuiz();
 
 });
+
+function note(n,correctas){
+  let html =`<div class="note p-3 text-primary-emphasis  border border-primary-subtle rounded-3">
+              <div>Respuestas correctas: ${correctas+"/"+n}</div>
+            </div><br>`;
+
+  $questionTest.insertAdjacentHTML('afterbegin',html);
+}
 function checkAnswers(parentNode,state){
   if(state){
     let html =`<div class="alert alert-success d-flex align-items-center" role="alert">
@@ -267,7 +281,7 @@ function renderQuiz(){
                   <span>${(i+1)+". "+item.question}</span>
 
                   <div class="form-check">
-                  <input value="${answers2[0]}" class="form-check-input" type="radio" name="${"select"+i}"   required="required">
+                  <input value="${answers2[0]}" class="form-check-input" type="radio" name="${"select"+i}">
                   <label class="form-check-label">${answers2[0]}</label>
                   </div>
 
