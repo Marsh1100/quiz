@@ -32,7 +32,7 @@ class QuestionManager {
 
 // Crear instancia de Preguntas
 const questionManager =  new QuestionManager();
-questionManager.addQuestion(new Question("¿Cuántos litros de sangre tiene una persona adulta?",
+/*questionManager.addQuestion(new Question("¿Cuántos litros de sangre tiene una persona adulta?",
                                         "Tiene entre 2 y 4 litros",
                                         "Tiene entre 4 y 6 litros",
                                         "Tiene 10 litros",
@@ -50,7 +50,7 @@ questionManager.addQuestion(new Question("¿Cuáles son los representantes más 
                                         "Caravaggio, Bernini, Borromini", "Jorge Isaac, José Martí, Eduardo Blanco",
                                         "0"));
 
-localStorage.setItem('questions', JSON.stringify(questionManager.question));
+localStorage.setItem('questions', JSON.stringify(questionManager.question));*/
 
 //AddEventListener
 document.addEventListener('DOMContentLoaded',function(){
